@@ -1,0 +1,5 @@
+[tools]
+go = "1.25.5"
+"aqua:kubernetes/kubernetes/kubectl" = "latest"
+"aqua:opentofu/opentofu" = "latest"
+"aqua:crossplane/crossplane" = "latest"
