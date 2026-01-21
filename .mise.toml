@@ -3,3 +3,21 @@ go = "1.25.5"
 "aqua:kubernetes/kubernetes/kubectl" = "latest"
 "aqua:opentofu/opentofu" = "latest"
 "aqua:crossplane/crossplane" = "latest"
+"aqua:k3d-io/k3d" = "latest"
+"aqua:abiosoft/colima" = "latest"
+
+[tasks."cluster:create"]
+description = "Create local Kubernetes cluster with k3d"
+run = "k3d cluster create demo"
+
+[tasks."cluster:delete"]
+description = "Delete local Kubernetes cluster"
+run = "k3d cluster delete demo"
+
+[tasks."runtime:start"]
+description = "Start Colima container runtime"
+run = "colima start"
+
+[tasks."runtime:stop"]
+description = "Stop Colima container runtime"
+run = "colima stop"
