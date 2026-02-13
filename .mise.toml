@@ -8,11 +8,36 @@ go = "1.25.5"
 
 [tasks."cluster:create"]
 description = "Create local Kubernetes cluster with k3d"
-run = "k3d cluster create demo"
+run = """
+k3d cluster create demo \
+    -p "8080:80@loadbalancer" \
+    -p "8443:443@loadbalancer" \
+    --k3s-arg "--disable=traefik@server:0"
+"""
 
 [tasks."cluster:delete"]
 description = "Delete local Kubernetes cluster"
 run = "k3d cluster delete demo"
+
+[tasks."gateway:deploy"]
+description = "Deploy envoy gateway routes"
+run = "kubectl -n envoy-gateway apply -f ./manifests/envoy/gateway.yaml"
+
+[tasks."apps:deploy"]
+description = "Deploy all demo apps to Kubernetes cluster"
+run = "kubectl -n apps apply -R -f ./manifests/apps/"
+
+[tasks."headlamp:deploy"]
+description = "Deploy Headlamp into Kubernetes cluster"
+run = "kubectl -n headlamp apply -R -f ./manifests/headlamp"
+
+[tasks."headlamp:login-token"]
+description = "Copys headlamp login token to user clipboard"
+run = "kubectl get secret headlamp-admin-token -n headlamp -o jsonpath='{.data.token}' | base64 --decode | pbcopy"
+
+[tasks."monitoring:deploy"]
+description = "Deploy Grafana and Prometheus gateways into Kubernetes cluster"
+run = "kubectl -n monitoring apply -R -f ./manifests/monitoring"
 
 [tasks."runtime:start"]
 description = "Start Colima container runtime"
